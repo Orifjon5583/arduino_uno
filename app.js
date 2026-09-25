@@ -450,11 +450,11 @@ function finishQuiz() {
     wrongQuestionsBox.style.display = "block";
     wrongQuestionsList.innerHTML = wrongDetailedArr.map(item => `
       <div class="wrong-item">
-        <div class="wrong-item-num">${item.qNum}-savol</div>
-        <div class="wrong-item-q">${item.question}</div>
+        <div class="wrong-item-num">${item.qNum}-SAVOL</div>
+        <div class="wrong-item-q">❓ ${item.question}</div>
         <div class="wrong-item-ans">
-          Sizning javob: <span class="user-badge">${item.userAns}</span><br>
-          To'g'ri javob: <span class="correct-badge">${item.correctAns}</span>
+          ❌ Sizning javobingiz: <span class="user-badge">${item.userAns}</span><br>
+          ✅ To'g'ri javob: <span class="correct-badge">${item.correctAns}</span>
         </div>
       </div>
     `).join("");
@@ -463,6 +463,11 @@ function finishQuiz() {
   }
 
   switchScreen(screenResults);
+
+  // Detailed string formatting for Google Sheets column M
+  const formattedWrongDetails = wrongDetailedArr.map(w => 
+    `${w.qNum}-savol: "${w.question}" [Sizning javob: ${w.userAns} | To'g'ri: ${w.correctAns}]`
+  ).join("\n");
 
   // Send data to Google Sheets
   sendDataToGoogleSheets({
@@ -478,7 +483,7 @@ function finishQuiz() {
     percentage: `${percentageVal}%`,
     duration: formattedTime,
     wrongQuestionsList: wrongListNumbers.length > 0 ? wrongListNumbers.join(", ") : "Yo'q",
-    wrongQuestionsDetailed: wrongDetailedArr.map(w => `${w.qNum}-savol: noto'g'ri`).join("; ") || "Barchasi to'g'ri"
+    wrongQuestionsDetailed: wrongCount > 0 ? formattedWrongDetails : "Barcha javoblar to'g'ri!"
   });
 }
 
