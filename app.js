@@ -258,10 +258,7 @@ const wrongQuestionsBox = document.getElementById("wrongQuestionsBox");
 const wrongQuestionsList = document.getElementById("wrongQuestionsList");
 const sheetsSyncStatus = document.getElementById("sheetsSyncStatus");
 const restartBtn = document.getElementById("restartBtn");
-
-const apiUrlInput = document.getElementById("apiUrlInput");
-const saveUrlBtn = document.getElementById("saveUrlBtn");
-const statusIndicator = document.getElementById("statusIndicator");
+const progressPctText = document.getElementById("progressPctText");
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", async () => {
@@ -277,25 +274,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("questions.json o'qishda fallback qo'llanildi.");
     questions = fallbackQuestions;
   }
-
-  // Load saved API URL
-  if (defaultApiUrl) {
-    apiUrlInput.value = defaultApiUrl;
-    statusIndicator.classList.add("connected");
-  }
-
-  // Save API URL Event
-  saveUrlBtn.addEventListener("click", () => {
-    const url = apiUrlInput.value.trim();
-    localStorage.setItem("arduino_apps_script_url", url);
-    defaultApiUrl = url;
-    if (url) {
-      statusIndicator.classList.add("connected");
-      alert("Google Apps Script URL muvaffaqiyatli saqlandi!");
-    } else {
-      statusIndicator.classList.remove("connected");
-    }
-  });
 
   // Form Submit -> Start Test
   studentForm.addEventListener("submit", (e) => {
@@ -342,6 +320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function switchScreen(activeScreen) {
   [screenRegistration, screenQuiz, screenResults].forEach(s => s.classList.remove("active"));
   activeScreen.classList.add("active");
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function startQuiz() {
@@ -369,6 +348,9 @@ function renderQuestion() {
   const total = questions.length;
 
   questionNumberText.textContent = `SAVOL ${currentQuestionIndex + 1} / ${total}`;
+  if (progressPctText) {
+    progressPctText.textContent = `${Math.round(((currentQuestionIndex + 1) / total) * 100)}%`;
+  }
   questionText.textContent = q.question;
 
   // Update progress bar
@@ -403,9 +385,9 @@ function renderQuestion() {
   // Prev / Next button state
   prevBtn.disabled = (currentQuestionIndex === 0);
   if (currentQuestionIndex === total - 1) {
-    nextBtn.textContent = "🏁 Testni yakunlash";
+    nextBtn.innerHTML = "🏁 Testni yakunlash";
   } else {
-    nextBtn.textContent = "Keyingisi ➡️";
+    nextBtn.innerHTML = 'Keyingisi <span>➡️</span>';
   }
 }
 
@@ -459,8 +441,8 @@ function finishQuiz() {
         <div class="wrong-item-num">${item.qNum}-savol</div>
         <div class="wrong-item-q">${item.question}</div>
         <div class="wrong-item-ans">
-          Sizning javob: <span class="user">${item.userAns}</span> | 
-          To'g'ri javob: <span class="correct">${item.correctAns}</span>
+          Sizning javob: <span class="user-badge">${item.userAns}</span><br>
+          To'g'ri javob: <span class="correct-badge">${item.correctAns}</span>
         </div>
       </div>
     `).join("");
@@ -489,18 +471,18 @@ function finishQuiz() {
 }
 
 async function sendDataToGoogleSheets(payload) {
-  const apiUrl = apiUrlInput.value.trim() || defaultApiUrl;
+  const apiUrl = defaultApiUrl;
 
   if (!apiUrl) {
     sheetsSyncStatus.style.background = "#fef3c7";
     sheetsSyncStatus.style.color = "#92400e";
-    sheetsSyncStatus.innerHTML = "⚠️ Google Apps Script URL kiritilmagan! (Yuqoridagi maydonga kiritib saqlang)";
+    sheetsSyncStatus.innerHTML = "⚠️ API manzili sozlanmagan.";
     return;
   }
 
   sheetsSyncStatus.style.background = "#e0f2fe";
   sheetsSyncStatus.style.color = "#0369a1";
-  sheetsSyncStatus.innerHTML = "⏳ Natijalar Google Sheets'ga yuborilmoqda...";
+  sheetsSyncStatus.innerHTML = "⏳ Natija saqlanmoqda...";
 
   try {
     await fetch(apiUrl, {
@@ -512,14 +494,14 @@ async function sendDataToGoogleSheets(payload) {
       body: JSON.stringify(payload)
     });
 
-    sheetsSyncStatus.style.background = "#dcfce7";
-    sheetsSyncStatus.style.color = "#166534";
-    sheetsSyncStatus.innerHTML = "✅ Natija Google Sheets'ga muvaffaqiyatli yuborildi!";
+    sheetsSyncStatus.style.background = "#ecfdf5";
+    sheetsSyncStatus.style.color = "#065f46";
+    sheetsSyncStatus.innerHTML = "✅ Natija saqlandi!";
   } catch (error) {
     console.error("Yuborishda xatolik:", error);
-    sheetsSyncStatus.style.background = "#fee2e2";
+    sheetsSyncStatus.style.background = "#fef2f2";
     sheetsSyncStatus.style.color = "#991b1b";
-    sheetsSyncStatus.innerHTML = "❌ Natijani yuborishda xatolik yuz berdi.";
+    sheetsSyncStatus.innerHTML = "❌ Natijani saqlashda xatolik yuz berdi.";
   }
 }
 
@@ -529,3 +511,4 @@ function formatDate(date) {
   const y = date.getFullYear();
   return `${d}.${m}.${y}`;
 }
+
