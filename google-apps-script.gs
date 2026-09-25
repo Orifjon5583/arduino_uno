@@ -1,15 +1,5 @@
 /**
  * Google Apps Script - Arduino UNO Test Natijalarini Yozish Tizimi
- * 
- * Qanday sozlanadi:
- * 1. Google Sheets (https://sheets.google.com) da yangi jadval oching.
- * 2. Birinchi qatarga quyidagi ustun nomlarini yozing:
- *    A1: Sana | B1: Ism | C1: Familiya | D1: Yosh | E1: Telefon | F1: Guruh | G1: Jami Savol | H1: To'g'ri | I1: Noto'g'ri | J1: Natija (%) | K1: Test Vaqti | L1: Noto'g'ri Savollar | M1: Noto'g'ri Savollar (Batafsil)
- * 3. Menyu: Extensions -> Apps Script (Kengaytmalar -> Apps Script) ga kiring.
- * 4. Ushbu kodni u yerga nusxalab qo'ying va saqlang (Ctrl + S).
- * 5. Deploy -> New deployment -> Select type: Web app (Veb-dastur) tanlang.
- * 6. Execute as: Me (O'zingiz) va Who has access: Anyone (Hamma) qiling!
- * 7. Deploy tugmasini bosing va olingan Web App URL manzilini nusxalab, app.js fayliga qo'ying.
  */
 
 function doPost(e) {
@@ -34,12 +24,14 @@ function doPost(e) {
         "Noto'g'ri Savollar (Batafsil)"
       ]);
       
-      // Sarlavha stilini chiroyli qilish
+      // Sarlavha stilini binafsha rang va oq yozuv qilish
       var headerRange = sheet.getRange(1, 1, 1, 13);
       headerRange.setBackground("#4F46E5");
       headerRange.setFontColor("#FFFFFF");
       headerRange.setFontWeight("bold");
       headerRange.setHorizontalAlignment("center");
+      headerRange.setVerticalAlignment("middle");
+      sheet.setRowHeight(1, 40);
     }
 
     var data;
@@ -81,10 +73,11 @@ function doPost(e) {
       wrongQuestionsDetailed
     ]);
 
-    // Formatlash
+    // Formatlash (Text Wrap va Tekislash)
     var lastRow = sheet.getLastRow();
     var rowRange = sheet.getRange(lastRow, 1, 1, 13);
-    rowRange.setHorizontalAlignment("left");
+    rowRange.setVerticalAlignment("middle");
+    rowRange.setWrap(true); // Matnlarni chiroyli avto-o'rash
 
     return ContentService.createTextOutput(JSON.stringify({
       "result": "success",
