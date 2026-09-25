@@ -8,7 +8,8 @@
       "Kompyuter ekrani",
       "Internet brauzer"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Arduino UNO — bu ATmega328P mikrokontrolleriga asoslangan elektron plata bo'lib, datchik va ijro etuvchi qurilmalarni boshqarish uchun ishlatiladi."
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
       "20 ta",
       "32 ta"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Arduino UNO platasida 0 dan 13 gacha raqamlangan 14 ta raqamli (digital) kirish/chiqish pinlari mavjud."
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
       "4 ta",
       "12 ta"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "Arduino UNO platasida A0, A1, A2, A3, A4 va A5 deb nomlangan 6 ta analog kirish pini bor."
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
       "Dasturni to'xtatadi",
       "Pinga kuchlanish o'lchaydi"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "pinMode(pin, mode) funksiyasi ko'rsatilgan pin signal qabul qiluvchi (INPUT) yoki signal chiqaruvchi (OUTPUT) ekanini belgilaydi."
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
       "13-pinni kirish rejimiga o'tkazadi",
       "13-pinni 13 sekundga to'xtatadi"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "digitalWrite() funksiyasiga HIGH (yuqori) qiymati berilganda pinda 5 Volt kuchlanish hosil bo'ladi va ulangan LED yoqiladi."
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
       "Arduino platasini qayta yuklaydi",
       "LED chiroqni miltillatadi"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "LOW (quyi) qiymati pindagi kuchlanishni 0 Voltga tushiradi va 13-pinga ulangan qurilmani o'chiradi."
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
       "Dasturni 1 sekundga (1000 millisekund) to'xtatib turadi",
       "1000 ta LED yoqadi"
     ],
-    "answer": 2
+    "answer": 2,
+    "explanation": "delay() funksiyasi vaqtni millisekundlarda qabul qiladi. 1000 millisekund = 1 sekundga teng."
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
       "RESET piniga",
       "A0 piniga"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "LED katodi (manfiy/qisqa oyog'i) har doim zanjirning manfiy qutbi bo'lgan GND (Yer/Ground) piniga ulanishi shart."
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
       "Arduinoni sekinlashtirish uchun",
       "Rangini o'zgartirish uchun"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Rezistor zanjirdan o'tayotgan elektr tokini cheklab, LED chiroq hamda Arduinoni kuydirib qo'yishdan himoya qiladi."
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
       "Plataga dastur yuklash uchun",
       "Vaqtni o'lchash uchun"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "digitalRead(pin) raqamli pinda 5V (HIGH) yoki 0V (LOW) signal borligini o'qiydi (masalan tugma bosilganini aniqlaydi)."
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
       "5V",
       "220V"
     ],
-    "answer": 2
+    "answer": 2,
+    "explanation": "Arduino UNO platasi 5 Voltli mantiqiy kuchlanish (TTL 5V) bilan ishlaydi."
   },
   {
     "id": 12,
@@ -129,7 +140,8 @@
       "Global Next Driver",
       "Generator Power Node"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "GND — inglizcha 'Ground' (Yer) so'zidan olingan bo'lib, elektr zanjirining 0V manfiy qutbini bildiradi."
   },
   {
     "id": 13,
@@ -140,7 +152,8 @@
       "AUX kabel",
       "Ethernet kabel"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Arduino UNO kompyuter bilan aloqa qilish va quvvat olish uchun standart USB Type-A to Type-B kabelidan foydalanadi."
   },
   {
     "id": 14,
@@ -151,7 +164,8 @@
       "main() va exit()",
       "run() va stop()"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Har bir Arduino kodi kamida ikkita majburiy funksiyadan iborat bo'lishi shart: void setup() va void loop()."
   },
   {
     "id": 15,
@@ -162,7 +176,8 @@
       "Tugma bosilgandagina",
       "Hech qachon ishlamaydi"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "void setup() plataga quvvat berilganda faqat bir marta ishga tushib, boshlang'ich sozlamalarni yuklaydi."
   },
   {
     "id": 16,
@@ -173,7 +188,8 @@
       "Faqat 10 marta ishlaydi",
       "Faqat kompyuter ulangan bo'lsa ishlaydi"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "void loop() ichidagi kodlar to Arduino o'chirilmaguncha yuqoridan pastga to'xtovsiz cheksiz takrorlanib ishlaydi."
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
       "Om (Ohm / Ω)",
       "Vatt (W)"
     ],
-    "answer": 2
+    "answer": 2,
+    "explanation": "Elektr qarshiligi nemis fizigi Georg Om sharafiga Om (Ohm / Ω) birligida o'lchanadi."
   },
   {
     "id": 18,
@@ -195,7 +212,8 @@
       "Faqat matnli xabar",
       "Har doim analoq signal"
     ],
-    "answer": 1
+    "answer": 1,
+    "explanation": "Raqamli (Digital) pinlar faqat 2 xil mantiqiy holatni ajrata oladi: HIGH (1 - 5V) yoki LOW (0 - 0V)."
   },
   {
     "id": 19,
@@ -206,7 +224,8 @@
       "Yuqori kuchlanishni o'chirish",
       "Faqat LED miltillatish"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "5V pini tashqi datchiklar, ekranlar hamda modullarni 5 Voltli stabil elektr quvvati bilan ta'minlaydi."
   },
   {
     "id": 20,
@@ -217,6 +236,7 @@
       "Faqat A0 va A1 pinlar",
       "Faqat 0 va 1 pinlar"
     ],
-    "answer": 0
+    "answer": 0,
+    "explanation": "Arduino UNO platasida 3, 5, 6, 9, 10 va 11-raqamli pinlar yonida '~' belgisi bor va ular PWM analog-simulyatsiya signalini hosil qila oladi."
   }
 ]

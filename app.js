@@ -1,6 +1,7 @@
-// Arduino Test Application Core Logic
+// Arduino Test Application Core Logic with Randomization & Instant Feedback
 
 let questions = [];
+let activeQuizQuestions = [];
 let currentQuestionIndex = 0;
 let userAnswers = {};
 let studentInfo = {};
@@ -8,229 +9,159 @@ let timerInterval = null;
 let secondsElapsed = 0;
 let defaultApiUrl = localStorage.getItem("arduino_apps_script_url") || "https://script.google.com/macros/s/AKfycbwD6OzvgYpIF0atUIENcpjHbhZavDibwCMaapcpiufKvHAw3_4YDpU3_SoD2ambeb97/exec";
 
-// Embedded fallback questions in case of local file:// CORS restrictions
+// Embedded fallback questions in case of file:// or fetch errors
 const fallbackQuestions = [
   {
     "id": 1,
     "question": "Arduino UNO nima?",
-    "options": [
-      "Operatsion tizim",
-      "Mikrokontrollerli elektron plata",
-      "Kompyuter ekrani",
-      "Internet brauzer"
-    ],
-    "answer": 1
+    "options": ["Operatsion tizim", "Mikrokontrollerli elektron plata", "Kompyuter ekrani", "Internet brauzer"],
+    "answer": 1,
+    "explanation": "Arduino UNO — bu ATmega328P mikrokontrolleriga asoslangan elektron plata bo'lib, datchik va ijro etuvchi qurilmalarni boshqarish uchun ishlatiladi."
   },
   {
     "id": 2,
     "question": "Arduino UNO platasida nechta raqamli (Digital) pin bor?",
-    "options": [
-      "8 ta",
-      "14 ta (0 dan 13 gacha)",
-      "20 ta",
-      "32 ta"
-    ],
-    "answer": 1
+    "options": ["8 ta", "14 ta (0 dan 13 gacha)", "20 ta", "32 ta"],
+    "answer": 1,
+    "explanation": "Arduino UNO platasida 0 dan 13 gacha raqamlangan 14 ta raqamli (digital) kirish/chiqish pinlari mavjud."
   },
   {
     "id": 3,
     "question": "Arduino UNO platasida nechta analog kirish (Analog In) pinlari mavjud?",
-    "options": [
-      "6 ta (A0 dan A5 gacha)",
-      "10 ta",
-      "4 ta",
-      "12 ta"
-    ],
-    "answer": 0
+    "options": ["6 ta (A0 dan A5 gacha)", "10 ta", "4 ta", "12 ta"],
+    "answer": 0,
+    "explanation": "Arduino UNO platasida A0, A1, A2, A3, A4 va A5 deb nomlangan 6 ta analog kirish pini bor."
   },
   {
     "id": 4,
     "question": "pinMode() funksiyasi kodingizda qanday vazifani bajaradi?",
-    "options": [
-      "Pindan qiymat o'qiydi",
-      "Pin rejimini (INPUT yoki OUTPUT) belgilaydi",
-      "Dasturni to'xtatadi",
-      "Pinga kuchlanish o'lchaydi"
-    ],
-    "answer": 1
+    "options": ["Pindan qiymat o'qiydi", "Pin rejimini (INPUT yoki OUTPUT) belgilaydi", "Dasturni to'xtatadi", "Pinga kuchlanish o'lchaydi"],
+    "answer": 1,
+    "explanation": "pinMode(pin, mode) funksiyasi ko'rsatilgan pin signal qabul qiluvchi (INPUT) yoki signal chiqaruvchi (OUTPUT) ekanini belgilaydi."
   },
   {
     "id": 5,
     "question": "digitalWrite(13, HIGH); kodi nima qiladi?",
-    "options": [
-      "13-pinga 0V beradi (o'chiradi)",
-      "13-pinga 5V beradi (yoqadi)",
-      "13-pinni kirish rejimiga o'tkazadi",
-      "13-pinni 13 sekundga to'xtatadi"
-    ],
-    "answer": 1
+    "options": ["13-pinga 0V beradi (o'chiradi)", "13-pinga 5V beradi (yoqadi)", "13-pinni kirish rejimiga o'tkazadi", "13-pinni 13 sekundga to'xtatadi"],
+    "answer": 1,
+    "explanation": "digitalWrite() funksiyasiga HIGH (yuqori) qiymati berilganda pinda 5 Volt kuchlanish hosil bo'ladi va ulangan LED yoqiladi."
   },
   {
     "id": 6,
     "question": "digitalWrite(13, LOW); buyrug'ining vazifasi nima?",
-    "options": [
-      "13-pin dagi kuchlanishni o'chiradi (0V)",
-      "13-pin dagi signalni maksimal qiladi (5V)",
-      "Arduino platasini qayta yuklaydi",
-      "LED chiroqni miltillatadi"
-    ],
-    "answer": 0
+    "options": ["13-pin dagi kuchlanishni o'chiradi (0V)", "13-pin dagi signalni maksimal qiladi (5V)", "Arduino platasini qayta yuklaydi", "LED chiroqni miltillatadi"],
+    "answer": 0,
+    "explanation": "LOW (quyi) qiymati pindagi kuchlanishni 0 Voltga tushiradi va 13-pinga ulangan qurilmani o'chiradi."
   },
   {
     "id": 7,
     "question": "delay(1000); kodi nimani bildiradi?",
-    "options": [
-      "Dasturni 1 minutga to'xtatadi",
-      "Dasturni 1000 sekundga to'xtatadi",
-      "Dasturni 1 sekundga (1000 millisekund) to'xtatib turadi",
-      "1000 ta LED yoqadi"
-    ],
-    "answer": 2
+    "options": ["Dasturni 1 minutga to'xtatadi", "Dasturni 1000 sekundga to'xtatadi", "Dasturni 1 sekundga (1000 millisekund) to'xtatib turadi", "1000 ta LED yoqadi"],
+    "answer": 2,
+    "explanation": "delay() funksiyasi vaqtni millisekundlarda qabul qiladi. 1000 millisekund = 1 sekundga teng."
   },
   {
     "id": 8,
     "question": "LED nurning manfiy oyog'i (Katod - qisqa oyog'i) Arduino platasining qaysi piniga ulanadi?",
-    "options": [
-      "5V piniga",
-      "GND (Ground) piniga",
-      "RESET piniga",
-      "A0 piniga"
-    ],
-    "answer": 1
+    "options": ["5V piniga", "GND (Ground) piniga", "RESET piniga", "A0 piniga"],
+    "answer": 1,
+    "explanation": "LED katodi (manfiy/qisqa oyog'i) har doim zanjirning manfiy qutbi bo'lgan GND (Yer/Ground) piniga ulanishi shart."
   },
   {
     "id": 9,
     "question": "LED chiroq ketidan rezistor ulashning asosiy sababi nima?",
-    "options": [
-      "LED yorqinligini oshirish uchun",
-      "LED kuyib qolmasligi va tokni cheklash uchun",
-      "Arduinoni sekinlashtirish uchun",
-      "Rangini o'zgartirish uchun"
-    ],
-    "answer": 1
+    "options": ["LED yorqinligini oshirish uchun", "LED kuyib qolmasligi va tokni cheklash uchun", "Arduinoni sekinlashtirish uchun", "Rangini o'zgartirish uchun"],
+    "answer": 1,
+    "explanation": "Rezistor zanjirdan o'tayotgan elektr tokini cheklab, LED chiroq hamda Arduinoni kuydirib qo'yishdan himoya qiladi."
   },
   {
     "id": 10,
     "question": "digitalRead() funksiyasi nima uchun ishlatiladi?",
-    "options": [
-      "Raqamli pindagi signal holatini (HIGH yoki LOW) o'qish uchun",
-      "Pinga signal yuborish uchun",
-      "Plataga dastur yuklash uchun",
-      "Vaqtni o'lchash uchun"
-    ],
-    "answer": 0
+    "options": ["Raqamli pindagi signal holatini (HIGH yoki LOW) o'qish uchun", "Pinga signal yuborish uchun", "Plataga dastur yuklash uchun", "Vaqtni o'lchash uchun"],
+    "answer": 0,
+    "explanation": "digitalRead(pin) raqamli pinda 5V (HIGH) yoki 0V (LOW) signal borligini o'qiydi (masalan tugma bosilganini aniqlaydi)."
   },
   {
     "id": 11,
     "question": "Arduino UNO ning ishchi mantiqiy kuchlanishi (logic voltage) necha Volt?",
-    "options": [
-      "12V",
-      "3.3V",
-      "5V",
-      "220V"
-    ],
-    "answer": 2
+    "options": ["12V", "3.3V", "5V", "220V"],
+    "answer": 2,
+    "explanation": "Arduino UNO platasi 5 Voltli mantiqiy kuchlanish (TTL 5V) bilan ishlaydi."
   },
   {
     "id": 12,
     "question": "Arduino platasidagi GND qisqartmasi nimani anglatadi?",
-    "options": [
-      "General Network Data",
-      "Ground (Yer / Manfiy qutb - 0V)",
-      "Global Next Driver",
-      "Generator Power Node"
-    ],
-    "answer": 1
+    "options": ["General Network Data", "Ground (Yer / Manfiy qutb - 0V)", "Global Next Driver", "Generator Power Node"],
+    "answer": 1,
+    "explanation": "GND — inglizcha 'Ground' (Yer) so'zidan olingan bo'lib, elektr zanjirining 0V manfiy qutbini bildiradi."
   },
   {
     "id": 13,
     "question": "Arduino UNO platasini kompyuterga ulash va kod yuklash uchun qaysi kabel ishlatiladi?",
-    "options": [
-      "HDMI kabel",
-      "USB Type-A / Type-B kabel",
-      "AUX kabel",
-      "Ethernet kabel"
-    ],
-    "answer": 1
+    "options": ["HDMI kabel", "USB Type-A / Type-B kabel", "AUX kabel", "Ethernet kabel"],
+    "answer": 1,
+    "explanation": "Arduino UNO kompyuter bilan aloqa qilish va quvvat olish uchun standart USB Type-A to Type-B kabelidan foydalanadi."
   },
   {
     "id": 14,
     "question": "Arduino kodi (sketch) nechta majburiy asosiy funksiyadan iborat?",
-    "options": [
-      "Faqat start()",
-      "setup() va loop()",
-      "main() va exit()",
-      "run() va stop()"
-    ],
-    "answer": 1
+    "options": ["Faqat start()", "setup() va loop()", "main() va exit()", "run() va stop()"],
+    "answer": 1,
+    "explanation": "Har bir Arduino kodi kamida ikkita majburiy funksiyadan iborat bo'lishi shart: void setup() va void loop()."
   },
   {
     "id": 15,
     "question": "void setup() funksiyasi qachon ishlaydi?",
-    "options": [
-      "Arduino yoqilganda yoki restart berilganda faqat 1 marta",
-      "Har 1 sekundda takrorlanadi",
-      "Tugma bosilgandagina",
-      "Hech qachon ishlamaydi"
-    ],
-    "answer": 0
+    "options": ["Arduino yoqilganda yoki restart berilganda faqat 1 marta", "Har 1 sekundda takrorlanadi", "Tugma bosilgandagina", "Hech qachon ishlamaydi"],
+    "answer": 0,
+    "explanation": "void setup() plataga quvvat berilganda faqat bir marta ishga tushib, boshlang'ich sozlamalarni yuklaydi."
   },
   {
     "id": 16,
     "question": "void loop() funksiyasi qanday tartibda bajariladi?",
-    "options": [
-      "Faqat bir marta ishlaydi",
-      "Arduino quvvatdan uzilguncha to'xtovsiz cheksiz qaytariladi",
-      "Faqat 10 marta ishlaydi",
-      "Faqat kompyuter ulangan bo'lsa ishlaydi"
-    ],
-    "answer": 1
+    "options": ["Faqat bir marta ishlaydi", "Arduino quvvatdan uzilguncha to'xtovsiz cheksiz qaytariladi", "Faqat 10 marta ishlaydi", "Faqat kompyuter ulangan bo'lsa ishlaydi"],
+    "answer": 1,
+    "explanation": "void loop() ichidagi kodlar to Arduino o'chirilmaguncha yuqoridan pastga to'xtovsiz cheksiz takrorlanib ishlaydi."
   },
   {
     "id": 17,
     "question": "Rezistor qarshiligi qaysi o'lchov birligida o'lchanadi?",
-    "options": [
-      "Volt (V)",
-      "Amper (A)",
-      "Om (Ohm / Ω)",
-      "Vatt (W)"
-    ],
-    "answer": 2
+    "options": ["Volt (V)", "Amper (A)", "Om (Ohm / Ω)", "Vatt (W)"],
+    "answer": 2,
+    "explanation": "Elektr qarshiligi nemis fizigi Georg Om sharafiga Om (Ohm / Ω) birligida o'lchanadi."
   },
   {
     "id": 18,
     "question": "Tugma (Push button) bosilganda o'qiladigan raqamli signal qanday bo'lishi mumkin?",
-    "options": [
-      "Faqat 100 Volt",
-      "HIGH (1) yoki LOW (0)",
-      "Faqat matnli xabar",
-      "Har doim analoq signal"
-    ],
-    "answer": 1
+    "options": ["Faqat 100 Volt", "HIGH (1) yoki LOW (0)", "Faqat matnli xabar", "Har doim analoq signal"],
+    "answer": 1,
+    "explanation": "Raqamli (Digital) pinlar faqat 2 xil mantiqiy holatni ajrata oladi: HIGH (1 - 5V) yoki LOW (0 - 0V)."
   },
   {
     "id": 19,
     "question": "Arduino UNO platasidagi 5V pinining vazifasi nima?",
-    "options": [
-      "Tashqi datchik va modullarga +5V stabil quvvat berish",
-      "Kompyuterni zaryadlash",
-      "Yuqori kuchlanishni o'chirish",
-      "Faqat LED miltillatish"
-    ],
-    "answer": 0
+    "options": ["Tashqi datchik va modullarga +5V stabil quvvat berish", "Kompyuterni zaryadlash", "Yuqori kuchlanishni o'chirish", "Faqat LED miltillatish"],
+    "answer": 0,
+    "explanation": "5V pini tashqi datchiklar, ekranlar hamda modullarni 5 Voltli stabil elektr quvvati bilan ta'minlaydi."
   },
   {
     "id": 20,
     "question": "Arduino UNO platasida qaysi pinlar PWM (Puls Kengligi Modulyatsiyasi) qo'llab-quvvatlaydi (~ belgisi bor)?",
-    "options": [
-      "3, 5, 6, 9, 10, 11 pinlar",
-      "Hamma pinlar",
-      "Faqat A0 va A1 pinlar",
-      "Faqat 0 va 1 pinlar"
-    ],
-    "answer": 0
+    "options": ["3, 5, 6, 9, 10, 11 pinlar", "Hamma pinlar", "Faqat A0 va A1 pinlar", "Faqat 0 va 1 pinlar"],
+    "answer": 0,
+    "explanation": "Arduino UNO platasida 3, 5, 6, 9, 10 va 11-raqamli pinlar yonida '~' belgisi bor va ular PWM analog-simulyatsiya signalini hosil qila oladi."
   }
 ];
+
+// Fisher-Yates Random Shuffle Algorithm
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 // DOM Elements
 const screenRegistration = document.getElementById("screenRegistration");
@@ -246,6 +177,7 @@ const progressFill = document.getElementById("progressFill");
 const questionNumberText = document.getElementById("questionNumberText");
 const questionText = document.getElementById("questionText");
 const optionsContainer = document.getElementById("optionsContainer");
+const feedbackContainer = document.getElementById("feedbackContainer");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
@@ -262,7 +194,6 @@ const progressPctText = document.getElementById("progressPctText");
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", async () => {
-  // Load questions
   try {
     const res = await fetch("questions.json");
     if (res.ok) {
@@ -274,9 +205,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("questions.json o'qishda fallback qo'llanildi.");
     questions = fallbackQuestions;
   }
-
-  // Initialize Lucide icons on load
-  refreshLucideIcons();
 
   // Form Submit -> Start Test
   studentForm.addEventListener("submit", (e) => {
@@ -304,7 +232,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   nextBtn.addEventListener("click", () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (userAnswers[currentQuestionIndex] === undefined) {
+      alert("Iltimos, avval javoblardan birini tanlang!");
+      return;
+    }
+
+    if (currentQuestionIndex < activeQuizQuestions.length - 1) {
       currentQuestionIndex++;
       renderQuestion();
     } else {
@@ -320,23 +253,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-function refreshLucideIcons() {
-  if (typeof lucide !== "undefined" && lucide.createIcons) {
-    lucide.createIcons();
-  }
-}
-
 function switchScreen(activeScreen) {
   [screenRegistration, screenQuiz, screenResults].forEach(s => s.classList.remove("active"));
   activeScreen.classList.add("active");
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  refreshLucideIcons();
 }
 
 function startQuiz() {
   currentQuestionIndex = 0;
   userAnswers = {};
   secondsElapsed = 0;
+
+  // 1. Shuffle Questions order
+  const shuffledRawQuestions = shuffleArray(questions);
+
+  // 2. Shuffle Options order for each question
+  activeQuizQuestions = shuffledRawQuestions.map(q => {
+    const mappedOptions = q.options.map((optText, origIdx) => ({
+      text: optText,
+      isCorrect: origIdx === q.answer
+    }));
+    return {
+      ...q,
+      shuffledOptions: shuffleArray(mappedOptions)
+    };
+  });
+
   switchScreen(screenQuiz);
   renderQuestion();
   startTimer();
@@ -354,8 +296,8 @@ function startTimer() {
 }
 
 function renderQuestion() {
-  const q = questions[currentQuestionIndex];
-  const total = questions.length;
+  const q = activeQuizQuestions[currentQuestionIndex];
+  const total = activeQuizQuestions.length;
 
   questionNumberText.textContent = `SAVOL ${currentQuestionIndex + 1} / ${total}`;
   if (progressPctText) {
@@ -363,42 +305,107 @@ function renderQuestion() {
   }
   questionText.textContent = q.question;
 
-  // Update progress bar
+  // Update progress fill
   const pct = ((currentQuestionIndex + 1) / total) * 100;
   progressFill.style.width = `${pct}%`;
 
-  // Render options A, B, C, D
   const letters = ["A", "B", "C", "D"];
   optionsContainer.innerHTML = "";
+  feedbackContainer.innerHTML = "";
 
-  q.options.forEach((optText, optIdx) => {
+  const savedAnswer = userAnswers[currentQuestionIndex];
+
+  q.shuffledOptions.forEach((optObj, optIdx) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "option-btn";
-    if (userAnswers[currentQuestionIndex] === optIdx) {
-      btn.classList.add("selected");
+
+    // If student already answered this question
+    if (savedAnswer !== undefined) {
+      btn.classList.add("disabled-btn");
+      btn.disabled = true;
+
+      // If this option is correct
+      if (optObj.isCorrect) {
+        btn.classList.add("correct-choice");
+      }
+      // If student selected this option and it was wrong
+      if (savedAnswer.selectedIdx === optIdx && !savedAnswer.isCorrect) {
+        btn.classList.add("wrong-choice");
+      }
+    } else {
+      // Not answered yet
+      btn.addEventListener("click", () => handleOptionClick(optIdx));
     }
 
     btn.innerHTML = `
       <span class="option-letter">${letters[optIdx]}</span>
-      <span>${optText}</span>
+      <span>${optObj.text}</span>
     `;
-
-    btn.addEventListener("click", () => {
-      userAnswers[currentQuestionIndex] = optIdx;
-      renderQuestion();
-    });
 
     optionsContainer.appendChild(btn);
   });
 
-  // Prev / Next button state
+  // Render Immediate Feedback if answered
+  if (savedAnswer !== undefined) {
+    const correctOpt = q.shuffledOptions.find(o => o.isCorrect);
+    
+    if (savedAnswer.isCorrect) {
+      feedbackContainer.innerHTML = `
+        <div class="feedback-card feedback-success">
+          <div class="feedback-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Barakalla! To'g'ri javob</span>
+          </div>
+          <div class="feedback-explanation">
+            💡 <strong>Tushuntirish:</strong> ${q.explanation || "To'g'ri javob berdingiz!"}
+          </div>
+        </div>
+      `;
+    } else {
+      feedbackContainer.innerHTML = `
+        <div class="feedback-card feedback-danger">
+          <div class="feedback-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            <span>Noto'g'ri javob!</span>
+          </div>
+          <div class="feedback-detail">
+            ✅ To'g'ri javob: <strong>${correctOpt ? correctOpt.text : ""}</strong>
+          </div>
+          <div class="feedback-explanation">
+            💡 <strong>Tushuntirish:</strong> ${q.explanation || ""}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  // Prev / Next button states
   prevBtn.disabled = (currentQuestionIndex === 0);
+  
   if (currentQuestionIndex === total - 1) {
     nextBtn.innerHTML = '<span>Testni yakunlash</span> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>';
   } else {
     nextBtn.innerHTML = '<span>Keyingisi</span> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
   }
+}
+
+function handleOptionClick(optIdx) {
+  if (userAnswers[currentQuestionIndex] !== undefined) return;
+
+  const q = activeQuizQuestions[currentQuestionIndex];
+  const selectedOpt = q.shuffledOptions[optIdx];
+  const correctOpt = q.shuffledOptions.find(o => o.isCorrect);
+
+  userAnswers[currentQuestionIndex] = {
+    selectedIdx: optIdx,
+    isCorrect: selectedOpt.isCorrect,
+    selectedText: selectedOpt.text,
+    correctText: correctOpt ? correctOpt.text : "",
+    questionText: q.question
+  };
+
+  renderQuestion();
 }
 
 function finishQuiz() {
@@ -409,30 +416,25 @@ function finishQuiz() {
   let wrongListNumbers = [];
   let wrongDetailedArr = [];
 
-  const letters = ["A", "B", "C", "D"];
-
-  questions.forEach((q, idx) => {
-    const userSelected = userAnswers[idx];
-    if (userSelected === q.answer) {
+  activeQuizQuestions.forEach((q, idx) => {
+    const ans = userAnswers[idx];
+    if (ans && ans.isCorrect) {
       correctCount++;
     } else {
       wrongCount++;
       const qNum = idx + 1;
       wrongListNumbers.push(qNum);
 
-      const userAnsStr = userSelected !== undefined ? `${letters[userSelected]}) ${q.options[userSelected]}` : "Javob berilmagan";
-      const correctAnsStr = `${letters[q.answer]}) ${q.options[q.answer]}`;
-
       wrongDetailedArr.push({
         qNum: qNum,
         question: q.question,
-        userAns: userAnsStr,
-        correctAns: correctAnsStr
+        userAns: ans ? ans.selectedText : "Javob berilmagan",
+        correctAns: ans ? ans.correctText : q.shuffledOptions.find(o => o.isCorrect)?.text || ""
       });
     }
   });
 
-  const totalQuestions = questions.length;
+  const totalQuestions = activeQuizQuestions.length;
   const percentageVal = Math.round((correctCount / totalQuestions) * 100);
   const formattedTime = timerText.textContent;
 
@@ -521,4 +523,3 @@ function formatDate(date) {
   const y = date.getFullYear();
   return `${d}.${m}.${y}`;
 }
-
