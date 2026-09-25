@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Arduino UNO Online Test Tizimi</title>
-  <!-- Google Fonts for modern typography -->
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Pro Vector Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/font-awesome/6.5.1/css/all.min.css">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,48 +22,73 @@
       
       <!-- App Header -->
       <header class="app-header">
-        <div class="header-icon">🤖</div>
+        <div class="header-icon-glow">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
         <h1>Arduino UNO Testi</h1>
-        <p>Bilimingizni sinab ko'ring va natijangizni oling!</p>
+        <p>Bilimingizni sinab ko'ring va natijangizni oling</p>
       </header>
 
       <!-- Step 1: Registration Form -->
       <div id="screenRegistration" class="screen active">
         <div class="card-intro">
-          <h2>👨‍🎓 O'quvchi anketasi</h2>
-          <p>Testni boshlash uchun o'zingiz haqingizdagi ma'lumotlarni to'ldiring</p>
+          <div class="intro-badge">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <h2>O'quvchi anketasi</h2>
+            <p>Testni boshlash uchun ma'lumotlaringizni to'ldiring</p>
+          </div>
         </div>
 
         <form id="studentForm" autocomplete="on">
           <div class="form-grid">
+            
             <div class="form-group">
               <label for="firstName">Ism <span class="req">*</span></label>
-              <input type="text" id="firstName" required placeholder="Masalan: Ali">
+              <div class="input-with-icon">
+                <i class="fa-solid fa-user icon-inside"></i>
+                <input type="text" id="firstName" required placeholder="Ali">
+              </div>
             </div>
 
             <div class="form-group">
               <label for="lastName">Familiya <span class="req">*</span></label>
-              <input type="text" id="lastName" required placeholder="Masalan: Karimov">
+              <div class="input-with-icon">
+                <i class="fa-solid fa-id-badge icon-inside"></i>
+                <input type="text" id="lastName" required placeholder="Karimov">
+              </div>
             </div>
 
             <div class="form-group">
               <label for="age">Yosh <span class="req">*</span></label>
-              <input type="number" id="age" min="7" max="25" required placeholder="Masalan: 12">
+              <div class="input-with-icon">
+                <i class="fa-solid fa-cake-candles icon-inside"></i>
+                <input type="number" id="age" min="7" max="25" required placeholder="12">
+              </div>
             </div>
 
             <div class="form-group">
               <label for="phone">Telefon raqam <span class="req">*</span></label>
-              <input type="tel" id="phone" required placeholder="+998 90 123 45 67">
+              <div class="input-with-icon">
+                <i class="fa-solid fa-phone icon-inside"></i>
+                <input type="tel" id="phone" required placeholder="+998 90 123 45 67">
+              </div>
             </div>
 
             <div class="form-group full-width">
               <label for="group">Guruh nomi <span class="req">*</span></label>
-              <input type="text" id="group" required placeholder="Masalan: Arduino-1 yoki Robototexnika-A">
+              <div class="input-with-icon">
+                <i class="fa-solid fa-users-gear icon-inside"></i>
+                <input type="text" id="group" required placeholder="Arduino-1 yoki Robototexnika-A">
+              </div>
             </div>
+
           </div>
 
           <button type="submit" class="btn btn-primary btn-large">
-            🚀 Testni boshlash
+            <span>Testni boshlash</span>
+            <i class="fa-solid fa-bolt"></i>
           </button>
         </form>
       </div>
@@ -67,14 +97,17 @@
       <div id="screenQuiz" class="screen">
         <div class="test-bar">
           <div class="student-badge">
-            <span class="user-avatar">👤</span>
+            <div class="user-avatar">
+              <i class="fa-solid fa-user-astronaut"></i>
+            </div>
             <div class="student-info-text">
               <span id="displayStudentName" class="s-name">Ali Karimov</span>
               <span id="displayGroup" class="s-group">Arduino-1</span>
             </div>
           </div>
+          
           <div class="timer-box">
-            <span class="timer-icon">⏱️</span>
+            <i class="fa-solid fa-stopwatch timer-icon"></i>
             <span id="timerText">00:00</span>
           </div>
         </div>
@@ -96,15 +129,17 @@
         </div>
 
         <div class="options-grid" id="optionsContainer">
-          <!-- Dynamic Options buttons inserted here -->
+          <!-- Options rendered via JS with Vector Icons -->
         </div>
 
         <div class="nav-buttons">
           <button type="button" class="btn btn-secondary" id="prevBtn" disabled>
-            <span>⬅️</span> Oldingisi
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Oldingisi</span>
           </button>
           <button type="button" class="btn btn-primary" id="nextBtn">
-            Keyingisi <span>➡️</span>
+            <span>Keyingisi</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </div>
@@ -112,9 +147,12 @@
       <!-- Step 3: Results Screen -->
       <div id="screenResults" class="screen">
         <div class="results-card">
-          <div class="result-badge-icon">🏆</div>
+          
+          <div class="result-badge-icon">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
           <h2>Test Natijangiz</h2>
-          <p class="result-sub">Arduino UNO kursi bo'yicha barcha savollar yakunlandi</p>
+          <p class="result-sub">Arduino UNO testi muvaffaqiyatli yakunlandi</p>
 
           <div class="score-circle-wrapper">
             <div class="score-circle" id="scoreCircle" style="--score-pct: 0;">
@@ -127,17 +165,17 @@
 
           <div class="stats-grid">
             <div class="stat-item correct-card">
-              <span class="stat-icon">✅</span>
+              <i class="fa-solid fa-circle-check stat-icon"></i>
               <div class="stat-value" id="statCorrect">0</div>
               <div class="stat-title">To'g'ri</div>
             </div>
             <div class="stat-item wrong-card">
-              <span class="stat-icon">❌</span>
+              <i class="fa-solid fa-circle-xmark stat-icon"></i>
               <div class="stat-value" id="statWrong">0</div>
               <div class="stat-title">Noto'g'ri</div>
             </div>
             <div class="stat-item time-card">
-              <span class="stat-icon">⏱️</span>
+              <i class="fa-solid fa-clock stat-icon"></i>
               <div class="stat-value" id="statTime">00:00</div>
               <div class="stat-title">Test vaqti</div>
             </div>
@@ -145,19 +183,24 @@
 
           <!-- Hidden Sync Status Indicator -->
           <div id="sheetsSyncStatus" class="sync-status">
-            <span>⏳ Natija saqlanmoqda...</span>
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>Natija saqlanmoqda...</span>
           </div>
 
           <!-- Wrong Questions Section -->
           <div class="wrong-questions-box" id="wrongQuestionsBox" style="display: none;">
-            <h3>⚠️ Noto'g'ri javob berilgan savollar:</h3>
+            <h3>
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Noto'g'ri javob berilgan savollar:</span>
+            </h3>
             <div id="wrongQuestionsList" class="wrong-list">
               <!-- Dynamic wrong items -->
             </div>
           </div>
 
           <button class="btn btn-primary btn-large" id="restartBtn" style="margin-top: 24px;">
-            🔄 Yangi test boshlash
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Yangi test boshlash</span>
           </button>
         </div>
       </div>

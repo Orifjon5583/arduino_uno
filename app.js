@@ -385,9 +385,9 @@ function renderQuestion() {
   // Prev / Next button state
   prevBtn.disabled = (currentQuestionIndex === 0);
   if (currentQuestionIndex === total - 1) {
-    nextBtn.innerHTML = "🏁 Testni yakunlash";
+    nextBtn.innerHTML = '<span>Testni yakunlash</span> <i class="fa-solid fa-flag-checkered"></i>';
   } else {
-    nextBtn.innerHTML = 'Keyingisi <span>➡️</span>';
+    nextBtn.innerHTML = '<span>Keyingisi</span> <i class="fa-solid fa-arrow-right"></i>';
   }
 }
 
@@ -476,13 +476,13 @@ async function sendDataToGoogleSheets(payload) {
   if (!apiUrl) {
     sheetsSyncStatus.style.background = "#fef3c7";
     sheetsSyncStatus.style.color = "#92400e";
-    sheetsSyncStatus.innerHTML = "⚠️ API manzili sozlanmagan.";
+    sheetsSyncStatus.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> <span>API manzili kiritilmagan.</span>';
     return;
   }
 
   sheetsSyncStatus.style.background = "#e0f2fe";
   sheetsSyncStatus.style.color = "#0369a1";
-  sheetsSyncStatus.innerHTML = "⏳ Natija saqlanmoqda...";
+  sheetsSyncStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Natija saqlanmoqda...</span>';
 
   try {
     await fetch(apiUrl, {
@@ -496,12 +496,12 @@ async function sendDataToGoogleSheets(payload) {
 
     sheetsSyncStatus.style.background = "#ecfdf5";
     sheetsSyncStatus.style.color = "#065f46";
-    sheetsSyncStatus.innerHTML = "✅ Natija saqlandi!";
+    sheetsSyncStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Natija saqlandi!</span>';
   } catch (error) {
     console.error("Yuborishda xatolik:", error);
     sheetsSyncStatus.style.background = "#fef2f2";
     sheetsSyncStatus.style.color = "#991b1b";
-    sheetsSyncStatus.innerHTML = "❌ Natijani saqlashda xatolik yuz berdi.";
+    sheetsSyncStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>Natijani saqlashda xatolik yuz berdi.</span>';
   }
 }
 
