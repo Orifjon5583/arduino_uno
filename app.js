@@ -395,12 +395,10 @@ function renderQuestion() {
   // Prev / Next button state
   prevBtn.disabled = (currentQuestionIndex === 0);
   if (currentQuestionIndex === total - 1) {
-    nextBtn.innerHTML = '<span>Testni yakunlash</span> <i data-lucide="flag"></i>';
+    nextBtn.innerHTML = '<span>Testni yakunlash</span> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>';
   } else {
-    nextBtn.innerHTML = '<span>Keyingisi</span> <i data-lucide="arrow-right"></i>';
+    nextBtn.innerHTML = '<span>Keyingisi</span> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
   }
-
-  refreshLucideIcons();
 }
 
 function finishQuiz() {
@@ -488,15 +486,13 @@ async function sendDataToGoogleSheets(payload) {
   if (!apiUrl) {
     sheetsSyncStatus.style.background = "#fef3c7";
     sheetsSyncStatus.style.color = "#92400e";
-    sheetsSyncStatus.innerHTML = '<i data-lucide="alert-triangle"></i> <span>API manzili kiritilmagan.</span>';
-    refreshLucideIcons();
+    sheetsSyncStatus.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> <span>API manzili kiritilmagan.</span>';
     return;
   }
 
   sheetsSyncStatus.style.background = "#e0f2fe";
   sheetsSyncStatus.style.color = "#0369a1";
-  sheetsSyncStatus.innerHTML = '<i data-lucide="loader-2" class="spin-icon"></i> <span>Natija saqlanmoqda...</span>';
-  refreshLucideIcons();
+  sheetsSyncStatus.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon spin-icon"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg> <span>Natija saqlanmoqda...</span>';
 
   try {
     await fetch(apiUrl, {
@@ -510,14 +506,13 @@ async function sendDataToGoogleSheets(payload) {
 
     sheetsSyncStatus.style.background = "#ecfdf5";
     sheetsSyncStatus.style.color = "#065f46";
-    sheetsSyncStatus.innerHTML = '<i data-lucide="check-circle-2"></i> <span>Natija saqlandi!</span>';
+    sheetsSyncStatus.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> <span>Natija saqlandi!</span>';
   } catch (error) {
     console.error("Yuborishda xatolik:", error);
     sheetsSyncStatus.style.background = "#fef2f2";
     sheetsSyncStatus.style.color = "#991b1b";
-    sheetsSyncStatus.innerHTML = '<i data-lucide="x-circle"></i> <span>Natijani saqlashda xatolik yuz berdi.</span>';
+    sheetsSyncStatus.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> <span>Natijani saqlashda xatolik yuz berdi.</span>';
   }
-  refreshLucideIcons();
 }
 
 function formatDate(date) {
