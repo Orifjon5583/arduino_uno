@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arduino UNO Online Test Tizimi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1>⚡ Arduino UNO Test Tizimi</h1>
+      <p>O'quvchilar bilimini baholash va Google Sheets'ga integratsiya qilish</p>
+    </header>
+
+    <!-- Google Apps Script API URL Config Bar -->
+    <div class="api-config-bar">
+      <span><span class="status-indicator" id="statusIndicator"></span> Google Sheets API:</span>
+      <input type="text" id="apiUrlInput" placeholder="Google Apps Script Web App URL manzilini kiriting...">
+      <button class="btn" id="saveUrlBtn" style="width: auto; padding: 6px 14px; font-size: 0.8rem;">Saqlash</button>
+    </div>
+
+    <!-- Step 1: Registration Form -->
+    <div id="screenRegistration" class="screen active">
+      <h2 style="margin-bottom: 8px;">👨‍🎓 O'quvchi ma'lumotlari</h2>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Testni boshlash uchun quyidagi shaklni to'ldiring:</p>
+
+      <form id="studentForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">Ism *</label>
+            <input type="text" id="firstName" required placeholder="Masalan: Ali">
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Familiya *</label>
+            <input type="text" id="lastName" required placeholder="Masalan: Karimov">
+          </div>
+
+          <div class="form-group">
+            <label for="age">Yosh *</label>
+            <input type="number" id="age" min="7" max="20" required placeholder="Masalan: 12">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Telefon raqam *</label>
+            <input type="tel" id="phone" required placeholder="+998 90 123 45 67">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="group">Guruh *</label>
+            <input type="text" id="group" required placeholder="Masalan: Arduino-1 yoki Robototexnika-A">
+          </div>
+        </div>
+
+        <button type="submit" class="btn">🚀 Testni boshlash</button>
+      </form>
+    </div>
+
+    <!-- Step 2: Quiz Test Screen -->
+    <div id="screenQuiz" class="screen">
+      <div class="test-bar">
+        <div class="student-badge">
+          👤 <span id="displayStudentName">Ali Karimov</span> (<span id="displayGroup">Arduino-1</span>)
+        </div>
+        <div class="timer-box">
+          ⏱️ Vaqt: <span id="timerText">00:00</span>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="question-header">
+        <span class="question-number" id="questionNumberText">Savol 1 / 20</span>
+      </div>
+
+      <div class="question-text" id="questionText">
+        Savol yuklanmoqda...
+      </div>
+
+      <div class="options-grid" id="optionsContainer">
+        <!-- Dynamic Options buttons will be inserted here -->
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" id="prevBtn" disabled>⬅️ Oldingisi</button>
+        <button type="button" class="btn" id="nextBtn">Keyingisi ➡️</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Results Screen -->
+    <div id="screenResults" class="screen">
+      <div class="results-card">
+        <h2 style="margin-bottom: 20px;">🏆 Test Natijangiz</h2>
+
+        <div class="score-circle" id="scoreCircle" style="--score-pct: 0;">
+          <div class="score-circle-inner">
+            <span class="score-number" id="scorePctText">0%</span>
+            <span class="score-label" id="scoreLabelText">Natija</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value correct" id="statCorrect">0</div>
+            <div class="stat-title">✅ To'g'ri</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value wrong" id="statWrong">0</div>
+            <div class="stat-title">❌ Noto'g'ri</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value time" id="statTime">00:00</div>
+            <div class="stat-title">⏱️ Test Vaqti</div>
+          </div>
+        </div>
+
+        <!-- Google Sheets Sync Status -->
+        <div id="sheetsSyncStatus" style="margin: 16px 0; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; background: #e0f2fe; color: #0369a1;">
+          ⏳ Natijalar Google Sheets'ga yuborilmoqda...
+        </div>
+
+        <!-- Wrong Questions Section -->
+        <div class="wrong-questions-box" id="wrongQuestionsBox" style="display: none;">
+          <h3>⚠️ Noto'g'ri javob berilgan savollar:</h3>
+          <div id="wrongQuestionsList">
+            <!-- Dynamic wrong items -->
+          </div>
+        </div>
+
+        <button class="btn" id="restartBtn" style="margin-top: 24px;">🔄 Yangi test boshlash</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

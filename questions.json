@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "question": "Arduino UNO nima?",
+    "options": [
+      "Operatsion tizim",
+      "Mikrokontrollerli elektron plata",
+      "Kompyuter ekrani",
+      "Internet brauzer"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "question": "Arduino UNO platasida nechta raqamli (Digital) pin bor?",
+    "options": [
+      "8 ta",
+      "14 ta (0 dan 13 gacha)",
+      "20 ta",
+      "32 ta"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "question": "Arduino UNO platasida nechta analog kirish (Analog In) pinlari mavjud?",
+    "options": [
+      "6 ta (A0 dan A5 gacha)",
+      "10 ta",
+      "4 ta",
+      "12 ta"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 4,
+    "question": "pinMode() funksiyasi kodingizda qanday vazifani bajaradi?",
+    "options": [
+      "Pindan qiymat o'qiydi",
+      "Pin rejimini (INPUT yoki OUTPUT) belgilaydi",
+      "Dasturni to'xtatadi",
+      "Pinga kuchlanish o'lchaydi"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "question": "digitalWrite(13, HIGH); kodi nima qiladi?",
+    "options": [
+      "13-pinga 0V beradi (o'chiradi)",
+      "13-pinga 5V beradi (yoqadi)",
+      "13-pinni kirish rejimiga o'tkazadi",
+      "13-pinni 13 sekundga to'xtatadi"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 6,
+    "question": "digitalWrite(13, LOW); buyrug'ining vazifasi nima?",
+    "options": [
+      "13-pin dagi kuchlanishni o'chiradi (0V)",
+      "13-pin dagi signalni maksimal qiladi (5V)",
+      "Arduino platasini qayta yuklaydi",
+      "LED chiroqni miltillatadi"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 7,
+    "question": "delay(1000); kodi nimani bildiradi?",
+    "options": [
+      "Dasturni 1 minutga to'xtatadi",
+      "Dasturni 1000 sekundga to'xtatadi",
+      "Dasturni 1 sekundga (1000 millisekund) to'xtatib turadi",
+      "1000 ta LED yoqadi"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 8,
+    "question": "LED nurning manfiy oyog'i (Katod - qisqa oyog'i) Arduino platasining qaysi piniga ulanadi?",
+    "options": [
+      "5V piniga",
+      "GND (Ground) piniga",
+      "RESET piniga",
+      "A0 piniga"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "question": "LED chiroq ketidan rezistor ulashning asosiy sababi nima?",
+    "options": [
+      "LED yorqinligini oshirish uchun",
+      "LED kuyib qolmasligi va tokni cheklash uchun",
+      "Arduinoni sekinlashtirish uchun",
+      "Rangini o'zgartirish uchun"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 10,
+    "question": "digitalRead() funksiyasi nima uchun ishlatiladi?",
+    "options": [
+      "Raqamli pindagi signal holatini (HIGH yoki LOW) o'qish uchun",
+      "Pinga signal yuborish uchun",
+      "Plataga dastur yuklash uchun",
+      "Vaqtni o'lchash uchun"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 11,
+    "question": "Arduino UNO ning ishchi mantiqiy kuchlanishi (logic voltage) necha Volt?",
+    "options": [
+      "12V",
+      "3.3V",
+      "5V",
+      "220V"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 12,
+    "question": "Arduino platasidagi GND qisqartmasi nimani anglatadi?",
+    "options": [
+      "General Network Data",
+      "Ground (Yer / Manfiy qutb - 0V)",
+      "Global Next Driver",
+      "Generator Power Node"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 13,
+    "question": "Arduino UNO platasini kompyuterga ulash va kod yuklash uchun qaysi kabel ishlatiladi?",
+    "options": [
+      "HDMI kabel",
+      "USB Type-A / Type-B kabel",
+      "AUX kabel",
+      "Ethernet kabel"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "question": "Arduino kodi (sketch) nechta majburiy asosiy funksiyadan iborat?",
+    "options": [
+      "Faqat start()",
+      "setup() va loop()",
+      "main() va exit()",
+      "run() va stop()"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 15,
+    "question": "void setup() funksiyasi qachon ishlaydi?",
+    "options": [
+      "Arduino yoqilganda yoki restart berilganda faqat 1 marta",
+      "Har 1 sekundda takrorlanadi",
+      "Tugma bosilgandagina",
+      "Hech qachon ishlamaydi"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 16,
+    "question": "void loop() funksiyasi qanday tartibda bajariladi?",
+    "options": [
+      "Faqat bir marta ishlaydi",
+      "Arduino quvvatdan uzilguncha to'xtovsiz cheksiz qaytariladi",
+      "Faqat 10 marta ishlaydi",
+      "Faqat kompyuter ulangan bo'lsa ishlaydi"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 17,
+    "question": "Rezistor qarshiligi qaysi o'lchov birligida o'lchanadi?",
+    "options": [
+      "Volt (V)",
+      "Amper (A)",
+      "Om (Ohm / Ω)",
+      "Vatt (W)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 18,
+    "question": "Tugma (Push button) bosilganda o'qiladigan raqamli signal qanday bo'lishi mumkin?",
+    "options": [
+      "Faqat 100 Volt",
+      "HIGH (1) yoki LOW (0)",
+      "Faqat matnli xabar",
+      "Har doim analoq signal"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 19,
+    "question": "Arduino UNO platasidagi 5V pinining vazifasi nima?",
+    "options": [
+      "Tashqi datchik va modullarga +5V stabil quvvat berish",
+      "Kompyuterni zaryadlash",
+      "Yuqori kuchlanishni o'chirish",
+      "Faqat LED miltillatish"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 20,
+    "question": "Arduino UNO platasida qaysi pinlar PWM (Puls Kengligi Modulyatsiyasi) qo'llab-quvvatlaydi (~ belgisi bor)?",
+    "options": [
+      "3, 5, 6, 9, 10, 11 pinlar",
+      "Hamma pinlar",
+      "Faqat A0 va A1 pinlar",
+      "Faqat 0 va 1 pinlar"
+    ],
+    "answer": 0
+  }
+]
