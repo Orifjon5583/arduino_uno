@@ -41,6 +41,24 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Lucide SVG icons styling */
+.lucide, svg.lucide {
+  width: 1.25em;
+  height: 1.25em;
+  stroke-width: 2.2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
